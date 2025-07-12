@@ -7,202 +7,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/emailjs-com/3.2.0/email.min.js"></script>
 
-    <script>
-        // Initialize EmailJS (you'll need to replace with your actual keys)
-        // emailjs.init("YOUR_PUBLIC_KEY");
-
-        // Global variables
-        var currentSlide = 0;
-        var slides, dots, totalSlides;
-        var sliderInterval;
-        var captchaAnswer;
-
-        // Hero slider functionality
-        function initializeSlider() {
-            slides = document.querySelectorAll('.hero-slide');
-            dots = document.querySelectorAll('.slider-dot');
-            totalSlides = slides.length;
-            
-            console.log('Slides found:', slides.length);
-            console.log('Dots found:', dots.length);
-            
-            if (slides.length === 0) {
-                console.error('No slides found!');
-                return;
-            }
-            
-            // Start with first slide
-            showSlide(0);
-            
-            // Auto-advance slides every 5 seconds
-            sliderInterval = setInterval(nextSlide, 5000);
-
-            // Dot navigation
-            for (var i = 0; i < dots.length; i++) {
-                (function(index) {
-                    dots[index].addEventListener('click', function() {
-                        console.log('Dot clicked:', index);
-                        showSlide(index);
-                    });
-                })(i);
-            }
-        }
-
-        function showSlide(index) {
-            console.log('Showing slide:', index);
-            
-            // Remove active class from all slides and dots
-            for (var i = 0; i < slides.length; i++) {
-                slides[i].classList.remove('active');
-            }
-            for (var i = 0; i < dots.length; i++) {
-                dots[i].classList.remove('active');
-            }
-            
-            // Add active class to current slide and dot
-            if (slides[index]) {
-                slides[index].classList.add('active');
-                console.log('Added active to slide', index);
-            }
-            if (dots[index]) {
-                dots[index].classList.add('active');
-                console.log('Added active to dot', index);
-            }
-            
-            currentSlide = index;
-        }
-
-        function nextSlide() {
-            var next = (currentSlide + 1) % totalSlides;
-            console.log('Next slide:', next);
-            showSlide(next);
-        }
-
-        // Captcha functionality
-        function generateCaptcha() {
-            var num1 = Math.floor(Math.random() * 10) + 1;
-            var num2 = Math.floor(Math.random() * 10) + 1;
-            captchaAnswer = num1 + num2;
-            document.getElementById('captcha-question').textContent = 'What is ' + num1 + ' + ' + num2 + '?';
-        }
-
-        // Form submission
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            
-            var captchaInput = parseInt(document.getElementById('captcha-input').value);
-            
-            if (captchaInput !== captchaAnswer) {
-                alert('Incorrect captcha answer. Please try again.');
-                generateCaptcha();
-                document.getElementById('captcha-input').value = '';
-                return;
-            }
-
-            var submitBtn = document.getElementById('submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Sending...';
-
-            // Simulate form submission
-            setTimeout(function() {
-                alert('Thank you! Your message has been received. We will get back to you soon.');
-                document.getElementById('contact-form').reset();
-                generateCaptcha();
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Send Message';
-            }, 2000);
-        }
-
-        // Initialize when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, initializing...');
-            
-            // Initialize slider
-            initializeSlider();
-            
-            // Initialize captcha
-            generateCaptcha();
-            
-            // Form submission
-            var contactForm = document.getElementById('contact-form');
-            if (contactForm) {
-                contactForm.addEventListener('submit', handleFormSubmit);
-            }
-            
-            // Smooth scrolling for navigation links
-            var navLinks = document.querySelectorAll('a[href^="#"]');
-            for (var i = 0; i < navLinks.length; i++) {
-                navLinks[i].addEventListener('click', function(e) {
-                    e.preventDefault();
-                    var target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            }
-
-            // Mobile menu toggle
-            var mobileMenu = document.querySelector('.mobile-menu');
-            var navLinksEl = document.querySelector('.nav-links');
-
-            if (mobileMenu && navLinksEl) {
-                mobileMenu.addEventListener('click', function() {
-                    navLinksEl.classList.toggle('active');
-                });
-
-                // Close mobile menu when clicking on a link
-                var mobileNavLinks = document.querySelectorAll('.nav-links a');
-                for (var i = 0; i < mobileNavLinks.length; i++) {
-                    mobileNavLinks[i].addEventListener('click', function() {
-                        navLinksEl.classList.remove('active');
-                    });
-                }
-            }
-
-            // Intersection Observer for animations
-            var observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            var observer = new IntersectionObserver(function(entries) {
-                for (var i = 0; i < entries.length; i++) {
-                    var entry = entries[i];
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                }
-            }, observerOptions);
-
-            // Observe all cards and sections for animations
-            var animatedElements = document.querySelectorAll('.service-card, .market-card, .industry-card, .value-card');
-            for (var i = 0; i < animatedElements.length; i++) {
-                var el = animatedElements[i];
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(el);
-            }
-        });
-
-        // Header background change on scroll
-        window.addEventListener('scroll', function() {
-            var header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-            }
-        });
-    </script>
-</body>
-</html> src="https://cdnjs.cloudflare.com/ajax/libs/emailjs-com/3.2.0/email.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -552,10 +356,6 @@
             margin-bottom: 0.5rem;
         }
 
-        .market-card p {
-            color: #64748b;
-        }
-
         /* Services Section */
         .services {
             background: #f8fafc;
@@ -791,6 +591,32 @@
             color: #9ca3af;
         }
 
+        /* Hero slide content styling */
+        .hero-slide-content {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+            text-align: left;
+            z-index: 3;
+            color: white;
+            max-width: 700px;
+            padding: 0 20px;
+        }
+
+        .hero-slide-content h1 {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-slide-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-links {
@@ -823,6 +649,19 @@
 
             .hero-content {
                 margin-top: 10vh;
+            }
+
+            .hero-slide-content {
+                left: 5%;
+                right: 5%;
+            }
+            
+            .hero-slide-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-slide-content p {
+                font-size: 1rem;
             }
 
             .about-content,
@@ -888,84 +727,44 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-  <div class="hero-slider">
-    <div class="hero-slide active" style="background-image: url('hero1.jpg');">
-      <div class="hero-slide-content">
-        <h1>Welcome to Gem Group</h1>
-        <p>Built on relationships. Grown through results.</p>
-        <a href="#about" class="cta-button">About Us</a>
-      </div>
-    </div>
-    <div class="hero-slide" style="background-image: url('hero2.jpg');">
-      <div class="hero-slide-content">
-        <h1>Where connections drive success.</h1>
-        <p>Empowering growth through trust, insight and collaboration.</p>
-        <a href="#services" class="cta-button">Our Services</a>
-      </div>
-    </div>
-    <div class="hero-slide" style="background-image: url('hero3.jpg');">
-      <div class="hero-slide-content">
-        <h1>Solutions across sectors. Impact across borders.</h1>
-        <p>From commodities to cloud, we deliver results that scale.</p>
-        <a href="#markets" class="cta-button">Explore Markets</a>
-      </div>
-    </div>
-    <div class="hero-slide" style="background-image: url('hero4.jpg');">
-      <div class="hero-slide-content">
-        <h1>Innovating for a digital-first world</h1>
-        <p>Bridging business needs with cutting-edge tech and smart consulting</p>
-        <a href="#contact" class="cta-button">Contact Us</a>
-      </div>
-    </div>
-  </div>
-  <div class="hero-overlay"></div>
-  <div class="slider-nav">
-    <span class="slider-dot active" data-slide="0"></span>
-    <span class="slider-dot" data-slide="1"></span>
-    <span class="slider-dot" data-slide="2"></span>
-    <span class="slider-dot" data-slide="3"></span>
-  </div>
-</section>
-
-<style>
-  .hero-slide-content {
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    transform: translateY(-50%);
-    text-align: left;
-    z-index: 3;
-    color: white;
-    max-width: 700px;
-    padding: 0 20px;
-  }
-
-  .hero-slide-content h1 {
-    font-size: 2.8rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  }
-
-  .hero-slide-content p {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  }
-
-  @media (max-width: 768px) {
-    .hero-slide-content {
-      left: 5%;
-      right: 5%;
-    }
-    .hero-slide-content h1 {
-      font-size: 2rem;
-    }
-    .hero-slide-content p {
-      font-size: 1rem;
-    }
-  }
-</style>
+        <div class="hero-slider">
+            <div class="hero-slide active" style="background-image: url('hero1.jpg');">
+                <div class="hero-slide-content">
+                    <h1>Welcome to Gem Group</h1>
+                    <p>Built on relationships. Grown through results.</p>
+                    <a href="#about" class="cta-button">About Us</a>
+                </div>
+            </div>
+            <div class="hero-slide" style="background-image: url('hero2.jpg');">
+                <div class="hero-slide-content">
+                    <h1>Where connections drive success.</h1>
+                    <p>Empowering growth through trust, insight and collaboration.</p>
+                    <a href="#services" class="cta-button">Our Services</a>
+                </div>
+            </div>
+            <div class="hero-slide" style="background-image: url('hero3.jpg');">
+                <div class="hero-slide-content">
+                    <h1>Solutions across sectors. Impact across borders.</h1>
+                    <p>From commodities to cloud, we deliver results that scale.</p>
+                    <a href="#markets" class="cta-button">Explore Markets</a>
+                </div>
+            </div>
+            <div class="hero-slide" style="background-image: url('hero4.jpg');">
+                <div class="hero-slide-content">
+                    <h1>Innovating for a digital-first world</h1>
+                    <p>Bridging business needs with cutting-edge tech and smart consulting</p>
+                    <a href="#contact" class="cta-button">Contact Us</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="slider-nav">
+            <span class="slider-dot active" data-slide="0"></span>
+            <span class="slider-dot" data-slide="1"></span>
+            <span class="slider-dot" data-slide="2"></span>
+            <span class="slider-dot" data-slide="3"></span>
+        </div>
+    </section>
 
     <!-- About Section -->
     <section id="about" class="about">
@@ -1007,22 +806,19 @@
     <!-- Markets Section -->
     <section id="markets" class="markets">
         <div class="container">
-            <h2 class="section-title">Markets We Serve</h2>
+            <h2 class="section-title">Primary Hubs</h2>
             <div class="markets-grid">
                 <div class="market-card">
                     <div class="market-flag">🇦🇪</div>
                     <h3>United Arab Emirates</h3>
-                    <p>Strategic hub for Middle East operations</p>
                 </div>
                 <div class="market-card">
                     <div class="market-flag">🇳🇬</div>
                     <h3>Nigeria</h3>
-                    <p>Gateway to West African markets</p>
                 </div>
                 <div class="market-card">
                     <div class="market-flag">🇮🇳</div>
                     <h3>India</h3>
-                    <p>Innovation and technology center</p>
                 </div>
             </div>
         </div>
@@ -1038,9 +834,8 @@
                     <p><strong>Facilitating Strategic Deals</strong></p>
                     <ul>
                         <li>Commodities trading and brokerage</li>
-                        <li>Real estate transactions</li>
-                        <li>Cross-border deal facilitation</li>
-                        <li>Local and international network leverage</li>
+                        <li>Real Estate Transactions</li>
+                        <li>Deal facilitation and sourcing</li>
                     </ul>
                 </div>
                 <div class="service-card">
@@ -1050,7 +845,6 @@
                         <li>Agricultural goods and commodities</li>
                         <li>Premium alcohol products</li>
                         <li>Specialty market products</li>
-                        <li>Supply chain optimization</li>
                     </ul>
                 </div>
                 <div class="service-card">
@@ -1058,10 +852,8 @@
                     <p><strong>Business Excellence & Strategy</strong></p>
                     <ul>
                         <li>Strategic planning and go-to-market strategies</li>
-                        <li>Operational excellence consulting</li>
-                        <li>Healthcare sector expertise</li>
-                        <li>Hospitality industry solutions</li>
-                        <li>Business process optimization</li>
+                        <li>Process Optimization & operational excellence consulting</li>
+                        <li>Healthcare, hospitality and F&B sector expertise</li>
                     </ul>
                 </div>
                 <div class="service-card">
@@ -1069,10 +861,7 @@
                     <p><strong>Comprehensive IT Services</strong></p>
                     <ul>
                         <li>Resource deployment and staffing</li>
-                        <li>Application development and support</li>
                         <li>Process automation and RPA</li>
-                        <li>Cloud security and migration</li>
-                        <li>DevSecOps implementation</li>
                         <li>Digital transformation consulting</li>
                     </ul>
                 </div>
@@ -1206,4 +995,199 @@
         </div>
     </footer>
 
-    <script
+    <script>
+        // Initialize EmailJS (you'll need to replace with your actual keys)
+        // emailjs.init("YOUR_PUBLIC_KEY");
+
+        // Global variables
+        var currentSlide = 0;
+        var slides, dots, totalSlides;
+        var sliderInterval;
+        var captchaAnswer;
+
+        // Hero slider functionality
+        function initializeSlider() {
+            slides = document.querySelectorAll('.hero-slide');
+            dots = document.querySelectorAll('.slider-dot');
+            totalSlides = slides.length;
+            
+            console.log('Slides found:', slides.length);
+            console.log('Dots found:', dots.length);
+            
+            if (slides.length === 0) {
+                console.error('No slides found!');
+                return;
+            }
+            
+            // Start with first slide
+            showSlide(0);
+            
+            // Auto-advance slides every 5 seconds
+            sliderInterval = setInterval(nextSlide, 5000);
+
+            // Dot navigation
+            for (var i = 0; i < dots.length; i++) {
+                (function(index) {
+                    dots[index].addEventListener('click', function() {
+                        console.log('Dot clicked:', index);
+                        showSlide(index);
+                    });
+                })(i);
+            }
+        }
+
+        function showSlide(index) {
+            console.log('Showing slide:', index);
+            
+            // Remove active class from all slides and dots
+            for (var i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
+            }
+            for (var i = 0; i < dots.length; i++) {
+                dots[i].classList.remove('active');
+            }
+            
+            // Add active class to current slide and dot
+            if (slides[index]) {
+                slides[index].classList.add('active');
+                console.log('Added active to slide', index);
+            }
+            if (dots[index]) {
+                dots[index].classList.add('active');
+                console.log('Added active to dot', index);
+            }
+            
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            var next = (currentSlide + 1) % totalSlides;
+            console.log('Next slide:', next);
+            showSlide(next);
+        }
+
+        // Captcha functionality
+        function generateCaptcha() {
+            var num1 = Math.floor(Math.random() * 10) + 1;
+            var num2 = Math.floor(Math.random() * 10) + 1;
+            captchaAnswer = num1 + num2;
+            document.getElementById('captcha-question').textContent = 'What is ' + num1 + ' + ' + num2 + '?';
+        }
+
+        // Form submission
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            var captchaInput = parseInt(document.getElementById('captcha-input').value);
+            
+            if (captchaInput !== captchaAnswer) {
+                alert('Incorrect captcha answer. Please try again.');
+                generateCaptcha();
+                document.getElementById('captcha-input').value = '';
+                return;
+            }
+
+            var submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            // Simulate form submission
+            setTimeout(function() {
+                alert('Thank you! Your message has been received. We will get back to you soon.');
+                document.getElementById('contact-form').reset();
+                generateCaptcha();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }, 2000);
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing...');
+            
+            // Initialize slider
+            initializeSlider();
+            
+            // Initialize captcha
+            generateCaptcha();
+            
+            // Form submission
+            var contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', handleFormSubmit);
+            }
+            
+            // Smooth scrolling for navigation links
+            var navLinks = document.querySelectorAll('a[href^="#"]');
+            for (var i = 0; i < navLinks.length; i++) {
+                navLinks[i].addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            }
+
+            // Mobile menu toggle
+            var mobileMenu = document.querySelector('.mobile-menu');
+            var navLinksEl = document.querySelector('.nav-links');
+
+            if (mobileMenu && navLinksEl) {
+                mobileMenu.addEventListener('click', function() {
+                    navLinksEl.classList.toggle('active');
+                });
+
+                // Close mobile menu when clicking on a link
+                var mobileNavLinks = document.querySelectorAll('.nav-links a');
+                for (var i = 0; i < mobileNavLinks.length; i++) {
+                    mobileNavLinks[i].addEventListener('click', function() {
+                        navLinksEl.classList.remove('active');
+                    });
+                }
+            }
+
+            // Intersection Observer for animations
+            var observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            var observer = new IntersectionObserver(function(entries) {
+                for (var i = 0; i < entries.length; i++) {
+                    var entry = entries[i];
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                }
+            }, observerOptions);
+
+            // Observe all cards and sections for animations
+            var animatedElements = document.querySelectorAll('.service-card, .market-card, .industry-card, .value-card');
+            for (var i = 0; i < animatedElements.length; i++) {
+                var el = animatedElements[i];
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            }
+        });
+
+        // Header background change on scroll
+        window.addEventListener('scroll', function() {
+            var header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            }
+        });
+    </script>
+</body>
+</html>
