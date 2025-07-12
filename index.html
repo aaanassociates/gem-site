@@ -55,7 +55,7 @@
         }
 
         .logo img {
-            height: 45px;
+            height: 90px;
             margin-right: 12px;
         }
 
@@ -102,36 +102,64 @@
             text-align: center;
         }
 
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(30, 74, 95, 0.3));
+            z-index: 1;
+        }
+
         .hero-content {
-            color: #000;
-            background-color: rgba(255, 255, 255, 0.6); /* Optional soft overlay */
-            padding: 30px 40px;
-            border-radius: 12px;
-            max-width: 90%;
+            color: #fff;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.25));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 50px 60px;
+            border-radius: 20px;
+            max-width: 700px;
             margin-top: 120px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .hero-content h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            color: #fff;
         }
 
         .hero-content p {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+            color: rgba(255, 255, 255, 0.95);
         }
 
         .scroll-down {
             display: inline-block;
-            font-size: 2rem;
+            font-size: 2.5rem;
             text-decoration: none;
-            color: #000;
+            color: #7dd3fc;
             animation: bounce 2s infinite;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            transition: color 0.3s ease;
+        }
+
+        .scroll-down:hover {
+            color: #fff;
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
+            50% { transform: translateY(15px); }
         }
 
         /* Sections */
@@ -530,12 +558,17 @@
                 display: flex;
             }
 
+            .hero-content {
+                padding: 40px 30px;
+                margin-top: 80px;
+            }
+
             .hero-content h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .hero-content p {
-                font-size: 1.2rem;
+                font-size: 1.4rem;
             }
 
             .about-content,
