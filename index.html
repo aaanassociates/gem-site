@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gem Group - Connecting Industries, Creating Value</title>
+    <script>
+        // Initialize EmailJS (you'll need to replace with your actual keys)
+        // emailjs.init("YOUR_PUBLIC_KEY");
+
+        // Hero slider functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            // Remove active class from all slides and dots
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // Add active class to current slide and dot
+            if (slides[index]) {
+                slides[index].classList.add('active');
+            }
+            if (dots[index]) {
+                dots[index].classList.add('active');
+            }
+            
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const next = (currentSlide + 1) % totalSlides;
+            showSlide(next);
+        }
+
+        // Initialize slider when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Start with first slide
+            showSlide(0);
+            
+            // Auto-advance slides every 5 seconds
+            setInterval(nextSlide, 5000);
+
+            // Dot navigation
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+            
+            // Generate initial captcha
+            generateCaptcha();
+        });
+
+        // Captcha functionality
+        let captchaAnswer;
+
+        function generateCaptcha() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            captchaAnswer = num1 + num2;
+            document.getElementById('captcha-question').textContent = `What is ${num1} + ${num2}?`;
+        }
+
+        // Generate initial captcha when page loads
+        // (This is now handled in the DOMContentLoaded event above)
+
+        // Form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const captchaInput = parseInt(document.getElementById('captcha-input').value);
+            
+            if (captchaInput !== captchaAnswer) {
+                alert('Incorrect captcha answer. Please try again.');
+                generateCaptcha();
+                document.getElementById('captcha-input').value = '';
+                return;
+            }
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            // Simulate form submission (replace with actual EmailJS implementation)
+            setTimeout(function() {
+                alert('Thank you! Your message has been received. We will get back to you soon.');
+                document.getElementById('contact-form').reset();
+                generateCaptcha();
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }, 2000);
+
+            // Uncomment this when you have EmailJS set up:
+            /*
+            emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
+                .then(function() {
+                    alert('Thank you! Your message has been sent successfully.');
+                    document.getElementById('contact-form').reset();
+                    generateCaptcha();
+                }, function(error) {
+                    alert('Sorry, there was an error sending your message. Please try again.');
+                    console.log('EmailJS error:', error);
+                })
+                .finally(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                });
+            */
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header background change on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections for animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.service-card, .market-card, .industry-card, .value-card');
+            animatedElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html> src="https://cdnjs.cloudflare.com/ajax/libs/emailjs-com/3.2.0/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e4a5f;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo img {
+            height: 45px;
+            margin-right: 12px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #1e4a5f;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #7dd3fc;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #1e4a5f;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-slide:nth-child(1) {
+            background-image: url('hero1.jpg');
+        }
+
+        .hero-slide:nth-child(2) {
+            background-image: url('hero2.jpg');
+        }
+
+        .hero-slide:nth-child(3) {
+            background-image: url('hero3.jpg');
+        }
+
+        .hero-slide:nth-child(4) {
+            background-image: url('hero4.jpg');
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 74, 95, 0.4), rgba(125, 211, 252, 0.3));
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 700px;
+            padding: 0 20px;
+            margin-top: 15vh;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.8rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #7dd3fc, #1e4a5f);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(125, 211, 252, 0.3);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(125, 211, 252, 0.5);
+        }
+
+        /* Slider Navigation */
+        .slider-nav {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 4;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .slider-dot.active {
+            background: white;
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #1e4a5f;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, #7dd3fc, #1e4a5f);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about {
+            background: #f8fafc;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text h3 {
+            color: #1e4a5f;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #4a5568;
+        }
+
+        /* Values Section - Similar to Company Profile */
+        .values-section {
+            margin-top: 2rem;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .value-card {
+            background: #1e4a5f;
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-left: 60px solid transparent;
+            border-top: 60px solid #7dd3fc;
+            opacity: 0.3;
+        }
+
+        .value-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: #7dd3fc;
+            font-weight: bold;
+        }
+
+        .value-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Markets Section */
+        .markets {
+            background: white;
+        }
+
+        .markets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .market-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid #f1f5f9;
+        }
+
+        .market-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-color: #7dd3fc;
+        }
+
+        .market-flag {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .market-card h3 {
+            color: #1e4a5f;
+            margin-bottom: 0.5rem;
+        }
+
+        .market-card p {
+            color: #64748b;
+        }
+
+        /* Services Section */
+        .services {
+            background: #f8fafc;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid #7dd3fc;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .service-card h3 {
+            color: #1e4a5f;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .service-card p {
+            color: #1e4a5f;
+            margin-bottom: 1rem;
+        }
+
+        .service-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .service-card li {
+            padding: 0.4rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+            color: #64748b;
+        }
+
+        .service-card li::before {
+            content: '→';
+            color: #7dd3fc;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Industries Section */
+        .industries {
+            background: white;
+        }
+
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .industry-card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .industry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border-color: #7dd3fc;
+        }
+
+        .industry-card h4 {
+            color: #1e4a5f;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .industry-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #1e4a5f;
+            color: white;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info h3 {
+            color: #7dd3fc;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info h4 {
+            color: #7dd3fc;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #7dd3fc;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .captcha-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .captcha-question {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #7dd3fc;
+        }
+
+        #captcha-input {
+            width: 100px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #7dd3fc, #1e4a5f);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #7dd3fc;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: #7dd3fc;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.98);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-content {
+                margin-top: 10vh;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .services-grid,
+            .markets-grid,
+            .industries-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <img src="logo.png" alt="Gem Group Logo">
+                <span>Gem Group</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#markets">Markets</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-slider">
+            <div class="hero-slide active"></div>
+            <div class="hero-slide"></div>
+            <div class="hero-slide"></div>
+            <div class="hero-slide"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Connecting Industries. Creating Value.</h1>
+            <p>Multi-service excellence across emerging markets with over a decade of trusted partnerships.</p>
+            <a href="#services" class="cta-button">Explore Our Services</a>
+        </div>
+        <div class="slider-nav">
+            <span class="slider-dot active" data-slide="0"></span>
+            <span class="slider-dot" data-slide="1"></span>
+            <span class="slider-dot" data-slide="2"></span>
+            <span class="slider-dot" data-slide="3"></span>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Gem Group</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Who We Are</h3>
+                    <p>At Gem Group, we're a multi-service company that connects industries and adds value across diverse verticals and emerging markets. With roots in the UAE, India, and Nigeria, our work spans brokerage, trading, consulting, and IT services—all guided by a commitment to trust, insight, and long-term relationships.</p>
+                    <p>We bring over a decade of experience across hospitality, healthcare, real estate, construction, and pharmaceuticals, built through years of hands-on work and a reliable global network.</p>
+                    <h3>Our Mission</h3>
+                    <p>To bridge gaps between markets and industries, enabling growth and success through strategic partnerships and innovative solutions.</p>
+                </div>
+                <div class="values-section">
+                    <h3 style="color: #1e4a5f; font-size: 1.5rem; margin-bottom: 1.5rem;">Our Values</h3>
+                    <div class="values-grid">
+                        <div class="value-card">
+                            <h4>EXCELLENCE</h4>
+                            <p>Delivering the highest standards in service and client satisfaction.</p>
+                        </div>
+                        <div class="value-card">
+                            <h4>INNOVATION</h4>
+                            <p>Continuously adopting latest tech to enhance solutions.</p>
+                        </div>
+                        <div class="value-card">
+                            <h4>PASSION</h4>
+                            <p>Driving impactful outcomes with dedication and enthusiasm.</p>
+                        </div>
+                        <div class="value-card">
+                            <h4>COLLABORATION</h4>
+                            <p>Building strong partnerships for mutual success.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Markets Section -->
+    <section id="markets" class="markets">
+        <div class="container">
+            <h2 class="section-title">Markets We Serve</h2>
+            <div class="markets-grid">
+                <div class="market-card">
+                    <div class="market-flag">🇦🇪</div>
+                    <h3>United Arab Emirates</h3>
+                    <p>Strategic hub for Middle East operations</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-flag">🇳🇬</div>
+                    <h3>Nigeria</h3>
+                    <p>Gateway to West African markets</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-flag">🇮🇳</div>
+                    <h3>India</h3>
+                    <p>Innovation and technology center</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>Gem Brokerage</h3>
+                    <p><strong>Facilitating Strategic Deals</strong></p>
+                    <ul>
+                        <li>Commodities trading and brokerage</li>
+                        <li>Real estate transactions</li>
+                        <li>Cross-border deal facilitation</li>
+                        <li>Local and international network leverage</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <h3>Gem Trading</h3>
+                    <p><strong>High-Demand Market Solutions</strong></p>
+                    <ul>
+                        <li>Agricultural goods and commodities</li>
+                        <li>Premium alcohol products</li>
+                        <li>Specialty market products</li>
+                        <li>Supply chain optimization</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <h3>Gem Consultancy</h3>
+                    <p><strong>Business Excellence & Strategy</strong></p>
+                    <ul>
+                        <li>Strategic planning and go-to-market strategies</li>
+                        <li>Operational excellence consulting</li>
+                        <li>Healthcare sector expertise</li>
+                        <li>Hospitality industry solutions</li>
+                        <li>Business process optimization</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <h3>Gem Tech</h3>
+                    <p><strong>Comprehensive IT Services</strong></p>
+                    <ul>
+                        <li>Resource deployment and staffing</li>
+                        <li>Application development and support</li>
+                        <li>Process automation and RPA</li>
+                        <li>Cloud security and migration</li>
+                        <li>DevSecOps implementation</li>
+                        <li>Digital transformation consulting</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industries Section -->
+    <section class="industries">
+        <div class="container">
+            <h2 class="section-title">Industries We Serve</h2>
+            <div class="industries-grid">
+                <div class="industry-card">
+                    <h4>Healthcare</h4>
+                    <p>Digital health solutions and operational efficiency</p>
+                </div>
+                <div class="industry-card">
+                    <h4>Hospitality</h4>
+                    <p>Guest experience enhancement and operational optimization</p>
+                </div>
+                <div class="industry-card">
+                    <h4>Real Estate</h4>
+                    <p>Market insights and transaction facilitation</p>
+                </div>
+                <div class="industry-card">
+                    <h4>Construction</h4>
+                    <p>Project management and supply chain solutions</p>
+                </div>
+                <div class="industry-card">
+                    <h4>Pharmaceuticals</h4>
+                    <p>Regulatory compliance and market access</p>
+                </div>
+                <div class="industry-card">
+                    <h4>Financial Services</h4>
+                    <p>Technology integration and process automation</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title" style="color: white;">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Ready to explore new opportunities?</h3>
+                    <p>Let's discuss how Gem Group can add value to your business.</p>
+                    <h4>Office Locations</h4>
+                    <p><strong>UAE Headquarters</strong><br>Dubai, United Arab Emirates</p>
+                    <p><strong>India Operations</strong><br>Mumbai, India</p>
+                    <p><strong>Nigeria Office</strong><br>Lagos, Nigeria</p>
+                </div>
+                <div class="contact-form">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="full-name">Full Name *</label>
+                            <input type="text" id="full-name" name="full_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company Name</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="service-interest">Service Interest</label>
+                            <select id="service-interest" name="service_interest">
+                                <option value="">Please select...</option>
+                                <option value="brokerage">Gem Brokerage</option>
+                                <option value="trading">Gem Trading</option>
+                                <option value="consultancy">Gem Consultancy</option>
+                                <option value="tech">Gem Tech</option>
+                                <option value="multiple">Multiple Services</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" required placeholder="Tell us about your project or how we can help..."></textarea>
+                        </div>
+                        <div class="captcha-container">
+                            <div class="captcha-question" id="captcha-question"></div>
+                            <input type="number" id="captcha-input" name="captcha" placeholder="Answer" required>
+                        </div>
+                        <button type="submit" class="submit-btn" id="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#markets">Markets</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#services">Gem Brokerage</a></li>
+                        <li><a href="#services">Gem Trading</a></li>
+                        <li><a href="#services">Gem Consultancy</a></li>
+                        <li><a href="#services">Gem Tech</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Gem Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script
