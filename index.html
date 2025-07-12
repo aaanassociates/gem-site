@@ -889,23 +889,80 @@
 
     <!-- Hero Section -->
     <section id="home" class="hero">
-        <div class="hero-slider">
-            <div class="hero-slide active"></div>
-            <div class="hero-slide"></div>
-            <div class="hero-slide"></div>
-            <div class="hero-slide"></div>
-        </div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <a href="#services" class="cta-button">Explore Our Services</a>
-        </div>
-        <div class="slider-nav">
-            <span class="slider-dot active" data-slide="0"></span>
-            <span class="slider-dot" data-slide="1"></span>
-            <span class="slider-dot" data-slide="2"></span>
-            <span class="slider-dot" data-slide="3"></span>
-        </div>
-    </section>
+  <div class="hero-slider">
+    <div class="hero-slide active" style="background-image: url('hero1.jpg');">
+      <div class="hero-slide-content">
+        <h1>Welcome to Gem Group</h1>
+        <p>Built on relationships. Grown through results.</p>
+        <a href="#about" class="cta-button">About Us</a>
+      </div>
+    </div>
+    <div class="hero-slide" style="background-image: url('hero2.jpg');">
+      <div class="hero-slide-content">
+        <h1>Where connections drive success.</h1>
+        <p>Empowering growth through trust, insight and collaboration.</p>
+        <a href="#services" class="cta-button">Our Services</a>
+      </div>
+    </div>
+    <div class="hero-slide" style="background-image: url('hero3.jpg');">
+      <div class="hero-slide-content">
+        <h1>Solutions across sectors. Impact across borders.</h1>
+        <p>From commodities to cloud, we deliver results that scale.</p>
+        <a href="#markets" class="cta-button">Explore Markets</a>
+      </div>
+    </div>
+    <div class="hero-slide" style="background-image: url('hero4.jpg');">
+      <div class="hero-slide-content">
+        <h1>Innovating for a digital-first world</h1>
+        <p>Bridging business needs with cutting-edge tech and smart consulting</p>
+        <a href="#contact" class="cta-button">Contact Us</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="slider-nav">
+    <span class="slider-dot active" data-slide="0"></span>
+    <span class="slider-dot" data-slide="1"></span>
+    <span class="slider-dot" data-slide="2"></span>
+    <span class="slider-dot" data-slide="3"></span>
+  </div>
+</section>
+
+<style>
+  .hero-slide-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 3;
+    color: white;
+    max-width: 700px;
+    padding: 0 20px;
+  }
+
+  .hero-slide-content h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .hero-slide-content p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .hero-slide-content h1 {
+      font-size: 2rem;
+    }
+    .hero-slide-content p {
+      font-size: 1rem;
+    }
+  }
+</style>
 
     <!-- About Section -->
     <section id="about" class="about">
