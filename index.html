@@ -35,22 +35,78 @@
             showSlide(next);
         }
 
-        // Initialize slider when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
+        // Debug: Let's add some console logs to see what's happening
+        console.log('Script loaded');
+        
+        // Hero slider functionality
+        let currentSlide = 0;
+        let slides, dots, totalSlides;
+        let sliderInterval;
+
+        function initializeSlider() {
+            slides = document.querySelectorAll('.hero-slide');
+            dots = document.querySelectorAll('.slider-dot');
+            totalSlides = slides.length;
+            
+            console.log('Slides found:', slides.length);
+            console.log('Dots found:', dots.length);
+            
+            if (slides.length === 0) {
+                console.error('No slides found!');
+                return;
+            }
+            
             // Start with first slide
             showSlide(0);
             
             // Auto-advance slides every 5 seconds
-            setInterval(nextSlide, 5000);
+            sliderInterval = setInterval(nextSlide, 5000);
 
             // Dot navigation
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => {
+                    console.log('Dot clicked:', index);
                     showSlide(index);
                 });
             });
+        }
+
+        function showSlide(index) {
+            console.log('Showing slide:', index);
             
-            // Generate initial captcha
+            // Remove active class from all slides and dots
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                console.log('Removed active from slide', i);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.remove('active');
+                console.log('Removed active from dot', i);
+            });
+            
+            // Add active class to current slide and dot
+            if (slides[index]) {
+                slides[index].classList.add('active');
+                console.log('Added active to slide', index);
+            }
+            if (dots[index]) {
+                dots[index].classList.add('active');
+                console.log('Added active to dot', index);
+            }
+            
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const next = (currentSlide + 1) % totalSlides;
+            console.log('Next slide:', next);
+            showSlide(next);
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing slider');
+            initializeSlider();
             generateCaptcha();
         });
 
@@ -874,8 +930,6 @@
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1>Connecting Industries. Creating Value.</h1>
-            <p>Multi-service excellence across emerging markets with over a decade of trusted partnerships.</p>
             <a href="#services" class="cta-button">Explore Our Services</a>
         </div>
         <div class="slider-nav">
